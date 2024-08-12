@@ -17,6 +17,7 @@ festivaldata is a project for Creating HTTP API and the the Details should be Di
 ### prerequisites
 
 -node.js ( version 20 )
+-winston ( Logging )
 -Docker ( Containerization )
 
 ## Installation
