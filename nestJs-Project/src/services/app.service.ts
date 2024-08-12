@@ -91,7 +91,7 @@ export class FestivalService {
     return JSON.parse(data) as RecordLabel[];
   }
 
-  private saveDataToCache(data: RecordLabel[]): void {
+  private saveDataToCache(data: RecordLabel[]){
     fs.writeFileSync(this.jsonFilePath, JSON.stringify(data, null, 2), 'utf8');
   }
 }
