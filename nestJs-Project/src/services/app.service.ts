@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import logger from './logger';
 
 export interface Festival {
   name: string;
@@ -24,19 +25,21 @@ export interface RecordLabel {
 
 @Injectable()
 export class FestivalService {
-  private readonly jsonFilePath = path.resolve(__dirname,'sample.json');
+  private readonly jsonFilePath = path.resolve(__dirname, 'sample.json');
 
   async fetchFestivalData(): Promise<Festival[]> {
     try {
-      const response = await axios.get('https://eacp.energyaustralia.com.au/codingtest/api/v1/festivals'); 
+      const response = await axios.get('https://eacp.energyaustralia.com.au/codingtest/api/v1/festivals');
+      logger.info('Fetched festival data from API');
       return response.data;
     } catch (error) {
-      console.error('Error fetching data from API', error);
+      logger.error('Error fetching data from API', error);
       return [];
     }
   }
 
   processFestivalData(data: Festival[]): RecordLabel[] {
+    logger.info('Processing festival data');
     const recordLabelsMap: Map<string, RecordLabel> = new Map();
 
     data.forEach(festival => {
@@ -68,13 +71,16 @@ export class FestivalService {
       });
     });
 
+    logger.info('Finished processing festival data');
     return recordLabels.sort((a, b) => a.label.localeCompare(b.label));
   }
 
   async getFestivalData(): Promise<RecordLabel[]> {
     if (this.isDataCached()) {
+      logger.info('Reading cached festival data');
       return this.readCachedData();
     } else {
+      logger.info('Fetching new festival data');
       const data = await this.fetchFestivalData();
       const processedData = this.processFestivalData(data);
       this.saveDataToCache(processedData);
@@ -88,10 +94,12 @@ export class FestivalService {
 
   private readCachedData(): RecordLabel[] {
     const data = fs.readFileSync(this.jsonFilePath, 'utf8');
+    logger.info('Cached data read successfully');
     return JSON.parse(data) as RecordLabel[];
   }
 
-  private saveDataToCache(data: RecordLabel[]){
+  private saveDataToCache(data: RecordLabel[]) {
     fs.writeFileSync(this.jsonFilePath, JSON.stringify(data, null, 2), 'utf8');
+    logger.info('Data cached successfully');
   }
 }
