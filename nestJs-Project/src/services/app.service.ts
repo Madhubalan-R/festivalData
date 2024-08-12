@@ -5,23 +5,28 @@ import * as path from 'path';
 
 export interface Festival {
   name: string;
+  bands: Band[];
 }
 
 export interface Band {
   name: string;
-  festivals: Festival[];
+  recordLabel: string;
+}
+export interface ProcessedBand {
+  name: string;
+  festivals: { name: string }[];
 }
 
 export interface RecordLabel {
   label: string;
-  bands: Band[];
+  bands: ProcessedBand[];
 }
 
 @Injectable()
 export class FestivalService {
   private readonly jsonFilePath = path.resolve(__dirname,'sample.json');
 
-  async fetchFestivalData(): Promise<any[]> {
+  async fetchFestivalData(): Promise<Festival[]> {
     try {
       const response = await axios.get('https://eacp.energyaustralia.com.au/codingtest/api/v1/festivals'); 
       return response.data;
@@ -31,7 +36,7 @@ export class FestivalService {
     }
   }
 
-  processFestivalData(data: any[]): RecordLabel[] {
+  processFestivalData(data: Festival[]): RecordLabel[] {
     const recordLabelsMap: Map<string, RecordLabel> = new Map();
 
     data.forEach(festival => {

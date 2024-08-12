@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FestivalService } from '../services/app.service';
 import axios from 'axios';
 import * as fs from 'fs';
-import * as path from 'path';
 
 jest.mock('axios');
 jest.mock('fs');
