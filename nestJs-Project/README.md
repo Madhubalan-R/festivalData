@@ -2,11 +2,11 @@
 
 ## project overview
 
-festivaldata is a project for Creating HTTP API and the the Details should be Display by Alphabetical
+festival data is a project for Creating HTTP API and the the Details should be Display by Alphabetical
 
 ## technology used
 
--node.js
+-node
 -Typescipt
 -NestJs
 -Docker
@@ -100,4 +100,11 @@ Access the application
 
 Open the Browser and Navigate to `http://localhost:3000/api/v1/festivals`.
 
-```
+
+## Environment
+
+.env.development
+
+.env.test
+
+.env.production
